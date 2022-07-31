@@ -1,5 +1,4 @@
 ![](https://github.com/mugioka/slack-bots/actions/workflows/ci-apps.yaml/badge.svg?branch=main)
-![](https://github.com/mugioka/slack-bots/actions/workflows/ci-helm-charts.yaml/badge.svg?branch=main)
 ![](https://github.com/mugioka/slack-bots/actions/workflows/release-helm-charts.yaml/badge.svg?branch=main)
 [![codecov](https://codecov.io/gh/mugioka/slack-bots/branch/main/graph/badge.svg?token=A343SU2DXS)](https://codecov.io/gh/mugioka/slack-bots)
 
