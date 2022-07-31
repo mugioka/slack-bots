@@ -21,7 +21,7 @@ jobs:
 
       -
         name: Set up Helm
-        uses: azure/setup-helm@v3.0
+        uses: azure/setup-helm@v3.3
         with:
           version: v${{ steps.get-tool-versions.outputs.HELM_VERSION }}
 
