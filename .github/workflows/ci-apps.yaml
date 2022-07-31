@@ -1,0 +1,90 @@
+name: CI Apps
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**.go'
+      - 'go.sum'
+      - 'go.mod'
+  pull_request:
+    paths:
+      - '**.go'
+      - 'go.sum'
+      - 'go.mod'
+jobs:
+  golangci-lint:
+    name: golangci-lint
+    runs-on: ubuntu-latest
+    steps:
+      -
+        uses: actions/checkout@v3
+
+      -
+        name: Get go/golangci-lint versions from .tool-versions
+        id: get-tool-versions
+        run: |
+          GO_VERSION=$(cat .tool-versions | awk -F' ' '{ if($1 == "golang") print $2 }')
+          echo ""::set-output name=GO_VERSION::${GO_VERSION}
+
+          GOLANGCI_LINT_VERSION=$(cat .tool-versions | awk -F' ' '{ if($1 == "golangci-lint") print $2 }')
+          echo ""::set-output name=GOLANGCI_LINT_VERSION::${GOLANGCI_LINT_VERSION}
+
+      -
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{ steps.get-tool-versions.outputs.GO_VERSION }}
+
+      -
+        name: Get golangci-lint version from .tool-versions
+        id: get-helm-version
+        run: |
+          GOLANGCI_LINT_VERSION=$(cat .tool-versions | awk -F' ' '{ if($1 == "golangci-lint") print $2 }')
+          echo ""::set-output name=GOLANGCI_LINT_VERSION::${GOLANGCI_LINT_VERSION}
+
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v3.2.0
+        with:
+          version: v${{ steps.get-tool-versions.outputs.GOLANGCI_LINT_VERSION }}
+          args: --timeout=10m
+  test:
+    name: test
+    runs-on: ubuntu-latest
+    steps:
+      -
+        uses: actions/checkout@v3
+
+      -
+        name: Get go versions from .tool-versions
+        id: get-tool-versions
+        run: |
+          GO_VERSION=$(cat .tool-versions | awk -F' ' '{ if($1 == "golang") print $2 }')
+          echo ""::set-output name=GO_VERSION::${GO_VERSION}
+
+      -
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{ steps.get-tool-versions.outputs.GO_VERSION }}
+
+      -
+        name: Cache Go Modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+      -
+        run: |
+          go mod download
+
+      -
+        run: |
+          go test -race -coverprofile="coverage.txt" -covermode=atomic ./...
+
+      -
+        name: Upload Coverage
+        uses: codecov/codecov-action@v3
