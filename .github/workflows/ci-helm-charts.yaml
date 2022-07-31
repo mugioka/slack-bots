@@ -1,0 +1,39 @@
+# https://github.com/helm/chart-testing-action#example-workflow
+name: CI for Helm Charts
+on: pull_request
+
+jobs:
+  lint-test:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      -
+        name: Get helm version from .tool-versions
+        id: get-tool-versions
+        run: |
+          HELM_VERSION=$(cat .tool-versions | awk -F' ' '{ if($1 == "helm") print $2 }')
+          echo ""::set-output name=HELM_VERSION::${HELM_VERSION}
+
+      -
+        name: Set up Helm
+        uses: azure/setup-helm@v3.0
+        with:
+          version: v${{ steps.get-tool-versions.outputs.HELM_VERSION }}
+
+      -
+        uses: actions/setup-python@v4.0.0
+        with:
+          python-version: 3.7
+
+      -
+        name: Set up chart-testing
+        uses: helm/chart-testing-action@v2.2.1
+
+      -
+        name: Run chart-testing (lint)
+        run: ct lint --config .github/ct-lint.yaml
