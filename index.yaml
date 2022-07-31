@@ -1,0 +1,15 @@
+apiVersion: v1
+entries:
+  gg-manager:
+  - apiVersion: v2
+    appVersion: v0.0.1
+    created: "2022-07-31T01:04:27.60653485Z"
+    description: A Helm chart for Google Group Manager(a.k.a GGManager), manage Google
+      Group with ChatOps
+    digest: 4d1e66a149cbd441a9141c8b8d4a24da6d28f31202f68ec32a8bf08319d0f484
+    name: gg-manager
+    type: application
+    urls:
+    - https://github.com/mugioka/slack-bots/releases/download/gg-manager-0.0.1/gg-manager-0.0.1.tgz
+    version: 0.0.1
+generated: "2022-07-31T01:04:27.60654475Z"
