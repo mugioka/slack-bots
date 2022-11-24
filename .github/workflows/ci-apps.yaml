@@ -43,7 +43,7 @@ jobs:
           echo ""::set-output name=GOLANGCI_LINT_VERSION::${GOLANGCI_LINT_VERSION}
 
       - name: golangci-lint
-        uses: golangci/golangci-lint-action@v3.2.0
+        uses: golangci/golangci-lint-action@v3.3.0
         with:
           version: v${{ steps.get-tool-versions.outputs.GOLANGCI_LINT_VERSION }}
           args: --timeout=10m
