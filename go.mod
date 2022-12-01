@@ -6,7 +6,7 @@ require (
 	github.com/golang/mock v1.6.0
 	github.com/spf13/viper v1.14.0
 	google.golang.org/protobuf v1.28.1
-	k8s.io/code-generator v0.25.3
+	k8s.io/code-generator v0.25.4
 )
 
 require (
